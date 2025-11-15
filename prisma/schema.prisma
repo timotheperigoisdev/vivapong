@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./prisma/dev.db"
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  name      String
+  color     String // HEX color
+  isGuest   Boolean  @default(false)
+  elo       Int      @default(1000)
+  createdAt DateTime @default(now())
+
+  matchesAsPlayerA Match[] @relation("PlayerA")
+  matchesAsPlayerB Match[] @relation("PlayerB")
+  matchesWon       Match[] @relation("Winner")
+
+  @@map("players")
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  playerAId Int
+  playerBId Int
+  scoreA    Int
+  scoreB    Int
+  winnerId  Int
+  playedAt  DateTime @default(now())
+
+  playerA Player @relation("PlayerA", fields: [playerAId], references: [id])
+  playerB Player @relation("PlayerB", fields: [playerBId], references: [id])
+  winner  Player @relation("Winner", fields: [winnerId], references: [id])
+
+  @@map("matches")
+}

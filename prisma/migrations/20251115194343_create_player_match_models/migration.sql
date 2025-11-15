@@ -1,0 +1,23 @@
+-- CreateTable
+CREATE TABLE "players" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "color" TEXT NOT NULL,
+    "isGuest" BOOLEAN NOT NULL DEFAULT false,
+    "elo" INTEGER NOT NULL DEFAULT 1000,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "matches" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "playerAId" INTEGER NOT NULL,
+    "playerBId" INTEGER NOT NULL,
+    "scoreA" INTEGER NOT NULL,
+    "scoreB" INTEGER NOT NULL,
+    "winnerId" INTEGER NOT NULL,
+    "playedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "matches_playerAId_fkey" FOREIGN KEY ("playerAId") REFERENCES "players" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "matches_playerBId_fkey" FOREIGN KEY ("playerBId") REFERENCES "players" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "matches_winnerId_fkey" FOREIGN KEY ("winnerId") REFERENCES "players" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
