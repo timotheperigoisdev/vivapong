@@ -1,102 +1,46 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Trophy, Users, Activity, TrendingUp } from "lucide-react";
-import { AddPlayerForm } from "@/components/AddPlayerForm";
-import { AddMatchForm } from "@/components/AddMatchForm";
-import { MatchTracker } from "@/components/MatchTracker";
 import { PlayersList } from "@/components/PlayersList";
 import { getPlayers } from "@/app/actions/players";
 import { ThemeToggleWrapper } from "@/components/ThemeToggleWrapper";
+import { StatsCard } from "@/components/StatsCard";
+import { EloChart } from "@/components/EloChart";
+import { EloInfoBox } from "@/components/EloInfoBox";
+import { MatchFormOrTracker } from "@/components/MatchFormOrTracker";
 
 export default async function Home() {
   const players = await getPlayers();
   const playersCount = players.length;
-  const topElo =
-    players.length > 0
-      ? Math.max(...players.map((p: { elo: number }) => p.elo))
-      : 1000;
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="flex justify-end mb-4">
+      <div className="container relative mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 lg:py-12 max-w-7xl">
+        <div className="absolute top-10 right-0 flex justify-end mb-3 sm:mb-4">
           <ThemeToggleWrapper />
         </div>
-        <div className="mb-12 text-center">
-          <h1 className="font-prompt text-5xl text-shadow-md font-bold tracking-tight mb-4 from-primary to-accent">
-            <span className="text-black">Viva</span>
+        <div className="mb-6 sm:mb-8 md:mb-12 text-center">
+          <h1 className="font-prompt text-3xl sm:text-4xl md:text-5xl text-shadow-md font-bold tracking-tight mb-2 sm:mb-3 md:mb-4 from-primary to-accent">
+            <span className="text-black dark:text-foreground">Viva</span>
             <span className="text-[#00aeef]">Pong</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Suivez vos matchs de ping-pong, enregistrez les résultats et
-            analysez vos performances avec un système ELO dynamique
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
+            Application de suivi des matchs de ping-pong et suivis des
+            performances de l'équipe VivaWeb
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Joueurs</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{playersCount}</div>
-              <p className="text-xs text-muted-foreground">
-                Joueurs enregistrés
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Matchs</CardTitle>
-              <Activity className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">0</div>
-              <p className="text-xs text-muted-foreground">Matchs joués</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Meilleur ELO
-              </CardTitle>
-              <Trophy className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{topElo}</div>
-              <p className="text-xs text-muted-foreground">Score de départ</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tendance</CardTitle>
-              <TrendingUp className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">--</div>
-              <p className="text-xs text-muted-foreground">
-                Évolution cette semaine
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 md:grid-cols-3 mb-6 sm:mb-8">
+          <div className="md:col-span-2">
+            <StatsCard playersCount={playersCount} />
+          </div>
+          <MatchFormOrTracker />
+        </div>
+        <div className="mb-6 sm:mb-8">
+          <EloInfoBox />
+        </div>
+        <div className="mb-6 sm:mb-8">
+          <EloChart />
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-          <AddPlayerForm />
-          <AddMatchForm />
-          <MatchTracker />
-        </div>
-
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <PlayersList />
         </div>
       </div>

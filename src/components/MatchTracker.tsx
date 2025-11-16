@@ -85,26 +85,28 @@ export function MatchTracker() {
             : "Suivez le score en temps réel"}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+      <CardContent className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div
-            className={`rounded-lg border-2 p-4 ${
+            className={`rounded-lg border-2 p-3 sm:p-4 ${
               match.scoreA >= 11
                 ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                : "border-gray-200 dark:border-gray-800"
+                : "border-gray-200 dark:border-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
               <div
-                className="w-4 h-4 rounded-full"
+                className="w-4 h-4 rounded-full shrink-0"
                 style={{ backgroundColor: match.playerA.color }}
               />
-              <h3 className="font-semibold">{match.playerA.name}</h3>
+              <h3 className="font-semibold text-sm sm:text-base truncate flex-1">
+                {match.playerA.name}
+              </h3>
               {match.playerA.isGuest && (
                 <span className="text-xs text-muted-foreground">(Invité)</span>
               )}
             </div>
-            <div className="text-4xl font-bold text-center mb-4">
+            <div className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4">
               {match.scoreA}
             </div>
             {!isFinished && (
@@ -115,6 +117,7 @@ export function MatchTracker() {
                   size="sm"
                   onClick={() => handleScoreChange("A", -1)}
                   disabled={isUpdating || match.scoreA === 0}
+                  className="min-w-[44px] min-h-[44px]"
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -124,6 +127,7 @@ export function MatchTracker() {
                   size="sm"
                   onClick={() => handleScoreChange("A", 1)}
                   disabled={isUpdating || match.scoreA >= 11}
+                  className="min-w-[44px] min-h-[44px]"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -132,23 +136,25 @@ export function MatchTracker() {
           </div>
 
           <div
-            className={`rounded-lg border-2 p-4 ${
+            className={`rounded-lg border-2 p-3 sm:p-4 ${
               match.scoreB >= 11
                 ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                : "border-gray-200 dark:border-gray-800"
+                : "border-gray-200 dark:border-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
               <div
-                className="w-4 h-4 rounded-full"
+                className="w-4 h-4 rounded-full shrink-0"
                 style={{ backgroundColor: match.playerB.color }}
               />
-              <h3 className="font-semibold">{match.playerB.name}</h3>
+              <h3 className="font-semibold text-sm sm:text-base truncate flex-1">
+                {match.playerB.name}
+              </h3>
               {match.playerB.isGuest && (
                 <span className="text-xs text-muted-foreground">(Invité)</span>
               )}
             </div>
-            <div className="text-4xl font-bold text-center mb-4">
+            <div className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4">
               {match.scoreB}
             </div>
             {!isFinished && (
@@ -159,6 +165,7 @@ export function MatchTracker() {
                   size="sm"
                   onClick={() => handleScoreChange("B", -1)}
                   disabled={isUpdating || match.scoreB === 0}
+                  className="min-w-[44px] min-h-[44px]"
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -168,6 +175,7 @@ export function MatchTracker() {
                   size="sm"
                   onClick={() => handleScoreChange("B", 1)}
                   disabled={isUpdating || match.scoreB >= 11}
+                  className="min-w-[44px] min-h-[44px]"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>

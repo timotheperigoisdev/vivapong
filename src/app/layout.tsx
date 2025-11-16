@@ -25,6 +25,22 @@ export const metadata: Metadata = {
   title: "VivaPong - Suivi des matchs de ping-pong",
   description:
     "Application pour suivre les matchs de ping-pong, enregistrer les résultats et suivre les performances avec un système ELO",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#2d2d2d" },
+  ],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "VivaPong",
+  },
 };
 
 export default function RootLayout({
