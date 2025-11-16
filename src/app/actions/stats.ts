@@ -15,8 +15,16 @@ export async function getTotalMatches() {
 export async function getPlayerOfTheWeek() {
   try {
     const now = new Date();
+    const dayOfWeek = now.getDay();
+    
+    if (dayOfWeek === 1) {
+      return null;
+    }
+
     const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - 7);
+    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    weekStart.setDate(now.getDate() - daysSinceMonday);
+    weekStart.setHours(0, 0, 0, 0);
     
     const matches = await prisma.match.findMany({
       where: {
@@ -60,6 +68,11 @@ export async function getPlayerOfTheWeek() {
 export async function getPlayerOfTheMonth() {
   try {
     const now = new Date();
+    
+    if (now.getDate() === 1) {
+      return null;
+    }
+
     const monthStart = new Date(now);
     monthStart.setDate(1);
     monthStart.setHours(0, 0, 0, 0);
@@ -127,7 +140,9 @@ export async function getCloseEloRaces() {
       const player = players[i];
       const ahead = i > 0 ? players[i - 1] : null;
       const behind = i < players.length - 1 ? players[i + 1] : null;
-
+      if (!ahead || !behind) {
+        continue;
+      }
       races.push({
         player,
         ahead,

@@ -9,9 +9,19 @@ export async function getPlayers() {
             orderBy: {
                 elo: "desc",
             },
+            include: {
+                _count: {
+                    select: {
+                        matchesWon: true,
+                    },
+                },
+            },
         })
         
-        return players
+        return players.map(player => ({
+            ...player,
+            winsCount: player._count.matchesWon,
+        }))
     } catch (error) {
         console.error("Error fetching players:", error)
         return []

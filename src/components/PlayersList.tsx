@@ -50,6 +50,9 @@ export async function PlayersList() {
                       ELO
                     </th>
                     <th className="text-left py-3 px-3 sm:px-4 font-medium text-xs sm:text-sm">
+                      Victoires
+                    </th>
+                    <th className="text-left py-3 px-3 sm:px-4 font-medium text-xs sm:text-sm">
                       Type
                     </th>
                     <th className="text-left py-3 px-3 sm:px-4 font-medium text-xs sm:text-sm">
@@ -68,6 +71,9 @@ export async function PlayersList() {
                       </td>
                       <td className="py-3 px-3 sm:px-4 text-sm">
                         {player.elo}
+                      </td>
+                      <td className="py-3 px-3 sm:px-4 text-sm">
+                        {(player as any).winsCount || 0}
                       </td>
                       <td className="py-3 px-3 sm:px-4">
                         {player.isGuest ? (
