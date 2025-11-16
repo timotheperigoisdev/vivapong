@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,8 @@ import {
 import { addPlayer } from "@/app/actions/players";
 import { useRouter } from "next/navigation";
 
+import { DEFAULT_COLOR_PLAYER, PRESET_COLORS_PLAYERS } from "@/app/constants";
+
 interface AddPlayerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -24,10 +26,20 @@ export function AddPlayerDialog({ open, onOpenChange }: AddPlayerDialogProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(DEFAULT_COLOR_PLAYER);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (open) {
+      setSelectedColor(DEFAULT_COLOR_PLAYER);
+      setShowColorPicker(false);
+      setMessage(null);
+    }
+  }, [open]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,11 +53,10 @@ export function AddPlayerDialog({ open, onOpenChange }: AddPlayerDialogProps) {
     } else {
       setMessage({ type: "success", text: "Joueur ajouté avec succès" });
       formRef.current?.reset();
+      setSelectedColor(DEFAULT_COLOR_PLAYER);
       router.refresh();
-      setTimeout(() => {
-        onOpenChange(false);
-        setMessage(null);
-      }, 1000);
+      onOpenChange(false);
+      setMessage(null);
     }
 
     setIsSubmitting(false);
@@ -81,14 +92,57 @@ export function AddPlayerDialog({ open, onOpenChange }: AddPlayerDialogProps) {
             <Label htmlFor="color" className="text-sm">
               Couleur
             </Label>
-            <Input
+            <input
               id="color"
               name="color"
-              type="color"
-              defaultValue="#3b82f6"
-              className="h-11 sm:h-10 w-full cursor-pointer min-h-[44px]"
-              disabled={isSubmitting}
+              type="hidden"
+              value={selectedColor}
             />
+            <div className="space-y-3">
+              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+                {PRESET_COLORS_PLAYERS.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => setSelectedColor(color)}
+                    className={`cursor-pointer w-8 h-8 rounded-md border-2 transition-all hover:scale-110 ${
+                      selectedColor === color
+                        ? "border-gray-900 dark:border-gray-100 ring-2 ring-offset-2 ring-gray-900 dark:ring-gray-100"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                    style={{ backgroundColor: color }}
+                    disabled={isSubmitting}
+                    aria-label={`Sélectionner la couleur ${color}`}
+                  />
+                ))}
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowColorPicker(!showColorPicker)}
+                disabled={isSubmitting}
+                className="cursor-pointer w-full sm:w-auto min-h-[44px]"
+              >
+                {showColorPicker
+                  ? "Masquer la pipette"
+                  : "Choisir une autre couleur"}
+              </Button>
+              {showColorPicker && (
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="color"
+                    value={selectedColor}
+                    onChange={(e) => setSelectedColor(e.target.value)}
+                    className="cursor-pointer h-11 sm:h-10 w-16 min-h-[44px]"
+                    disabled={isSubmitting}
+                  />
+                  <Label className="text-xs text-muted-foreground whitespace-nowrap">
+                    Pipette
+                  </Label>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center space-x-2 min-h-[44px]">
@@ -117,20 +171,20 @@ export function AddPlayerDialog({ open, onOpenChange }: AddPlayerDialogProps) {
             </div>
           )}
 
-          <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+          <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-2">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
-              className="w-full sm:w-auto min-h-[44px]"
+              className="cursor-pointer w-full sm:w-auto min-h-[44px]"
             >
               Annuler
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto min-h-[44px]"
+              className="cursor-pointer w-full sm:w-auto min-h-[44px]"
             >
               {isSubmitting ? "Ajout en cours..." : "Ajouter le joueur"}
             </Button>

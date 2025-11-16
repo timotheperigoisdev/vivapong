@@ -13,7 +13,7 @@ export function PlayersListClient() {
       <Button
         onClick={() => setDialogOpen(true)}
         size="sm"
-        className="min-h-[44px] text-xs sm:text-sm"
+        className="cursor-pointer min-h-[44px] text-xs sm:text-sm"
       >
         <Plus className="h-4 w-4" />
         <span className="hidden sm:inline">Ajouter un joueur</span>

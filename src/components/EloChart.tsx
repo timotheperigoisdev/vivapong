@@ -72,10 +72,10 @@ export function EloChart() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5" />
-          Évolution des ELO
+          Évolution de l'équipe
         </CardTitle>
         <CardDescription>
-          Suivez l'évolution des scores ELO dans le temps
+          Suivi de l'évolution des performances de l'équipe dans le temps
         </CardDescription>
       </CardHeader>
       <CardContent>

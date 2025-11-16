@@ -28,7 +28,7 @@ export function EloInfoBox() {
             variant="ghost"
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="min-h-[44px] text-xs sm:text-sm"
+            className="cursor-pointer min-h-[44px] text-xs sm:text-sm"
             aria-label={isExpanded ? "Réduire" : "Développer"}
           >
             {isExpanded ? "Masquer" : "En savoir plus"}

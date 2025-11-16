@@ -19,6 +19,7 @@ import {
 import { Trophy, Zap, Edit } from "lucide-react";
 import { Player } from "@/types/player.types";
 import { useRouter } from "next/navigation";
+import { useCurrentMatch } from "@/hooks/useCurrentMatch";
 
 export function AddMatchForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -27,11 +28,12 @@ export function AddMatchForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoadingPlayers, setIsLoadingPlayers] = useState(true);
-  const [matchMode, setMatchMode] = useState<"realtime" | "manual">("realtime");
+  const [matchMode, setMatchMode] = useState<"realtime" | "manual">("manual");
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const { refreshMatch } = useCurrentMatch();
 
   useEffect(() => {
     async function loadPlayers() {
@@ -76,9 +78,7 @@ export function AddMatchForm() {
       setTimeout(() => {
         setIsSubmitting(false);
         setMessage(null);
-        if (playerARef.current) {
-          playerARef.current.focus();
-        }
+        refreshMatch();
       }, 1500);
     }
   }
@@ -99,22 +99,8 @@ export function AddMatchForm() {
           <div className="flex gap-2 p-1 bg-muted rounded-lg">
             <button
               type="button"
-              onClick={() => setMatchMode("realtime")}
-              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
-                matchMode === "realtime"
-                  ? "bg-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              disabled={isSubmitting}
-              aria-label="Mode temps réel"
-            >
-              <Zap className="h-4 w-4 shrink-0" />
-              <span>Temps réel</span>
-            </button>
-            <button
-              type="button"
               onClick={() => setMatchMode("manual")}
-              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
+              className={`cursor-pointer flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
                 matchMode === "manual"
                   ? "bg-background shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -125,6 +111,20 @@ export function AddMatchForm() {
               <Edit className="h-4 w-4 shrink-0" />
               <span className="hidden sm:inline">Score manuel</span>
               <span className="sm:hidden">Manuel</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMatchMode("realtime")}
+              className={`cursor-pointer flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors min-h-[44px] ${
+                matchMode === "realtime"
+                  ? "bg-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              disabled={isSubmitting}
+              aria-label="Mode temps réel"
+            >
+              <Zap className="h-4 w-4 shrink-0" />
+              <span>Temps réel</span>
             </button>
           </div>
 
@@ -228,7 +228,7 @@ export function AddMatchForm() {
 
           <Button
             type="submit"
-            className="w-full min-h-[44px] text-sm sm:text-base"
+            className="cursor-pointer w-full min-h-[44px] text-sm sm:text-base"
             disabled={isSubmitting || isLoadingPlayers}
             aria-label={
               matchMode === "realtime"

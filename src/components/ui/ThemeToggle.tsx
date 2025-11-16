@@ -13,7 +13,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       aria-label="Basculer le thème"
-      className="min-w-[44px] min-h-[44px]"
+      className="cursor-pointer min-w-[44px] min-h-[44px]"
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5" />
